@@ -1,12 +1,22 @@
+from sklearn.linear_model import LinearRegression
+import pandas as pd
+import numpy as np
+
+import joblib as joblib
+from sklearn.metrics import mean_squared_log_error
+
+from house_prices.preprocess import *
+
+
 def train_model(X_train, y_train, model_path):
     # Train the model
     model = LinearRegression()
     model.fit(X_train, y_train)
     # Save the model
-    joblib.dump(model, model_path)
+    joblib.dump(model, model_path+'model.joblib')
 
 
-def make_predictions(input_data: pd.DataFrame) -> np.ndarray:
+def make_predictions(input_data) -> np.ndarray:
     path = 'C:/Users/jayes/Desktop/DSP_GIT/dsp-jayeshkaushik-narayanareddy/models/'
     model_saved = joblib.load(path + 'model.joblib')
     predictions = model_saved.predict(input_data)
@@ -23,7 +33,7 @@ def compute_rmsle(y_test: np.ndarray, y_pred: np.ndarray, precision: int = 2) ->
 def build_model(data: pd.DataFrame) -> dict[str, str]:
     from sklearn.model_selection import train_test_split
 
-    X, y = df.drop(columns=['SalePrice']), df['SalePrice']
+    X, y = data.drop(columns=['SalePrice']), data['SalePrice']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 

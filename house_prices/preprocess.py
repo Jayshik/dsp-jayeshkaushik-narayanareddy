@@ -1,3 +1,8 @@
+import joblib
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
+
 def select_features(X_train, y_train):
     # Feature selection
     features = ['Foundation', 'KitchenQual', 'TotRmsAbvGrd', 'WoodDeckSF', 'YrSold', '1stFlrSF']
@@ -6,6 +11,8 @@ def select_features(X_train, y_train):
     # Removing duplicates
     df_train = df_train[~df_train[features].duplicated(keep='first')]
     df_train = df_train.reset_index(drop=True)
+    
+    df_train = df_train.dropna()
 
     y_train = df_train['SalePrice']
     df_train = df_train.drop(columns=['SalePrice'])
@@ -39,7 +46,8 @@ def scale_categorical_features(df_train, path):
 
     df_categorical_train = pd.DataFrame(categorical_features_encoded.toarray(),
                                         columns=encoder.get_feature_names_out(categorical_columns_train))
-    df_categorical_train.drop(['Foundation_Wood'], axis=1, inplace=True)
+    if 'Foundation_Wood' in df_categorical_train.columns:
+        df_categorical_train.drop(['Foundation_Wood'], axis=1, inplace=True)
 
     return df_categorical_train
 
