@@ -2,6 +2,8 @@ from sklearn.linear_model import LinearRegression
 import pandas as pd
 import numpy as np
 import joblib as joblib
+import sys
+sys.path.append('..')
 from sklearn.metrics import mean_squared_log_error
 from house_prices.preprocess import select_features
 from house_prices.preprocess import scale_continuous_features
@@ -18,7 +20,7 @@ def train_model(X_train, y_train, model_path):
 
 
 def make_predictions(input_data) -> np.ndarray:
-    path = 'models/'
+    path = '../models/'
     model_saved = joblib.load(path + 'model.joblib')
     predictions = model_saved.predict(input_data)
     predictions[predictions < 0] = 0
@@ -36,7 +38,7 @@ def build_model(data: pd.DataFrame) -> dict[str, str]:
     X, y = data.drop(columns=['SalePrice']), data['SalePrice']
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.25, random_state=42)
-    path = 'models/'
+    path = '../models/'
     df_train, y_train = select_features(X_train, y_train)
     df_continuous_train = scale_continuous_features(df_train, path)
     df_categorical_train = scale_categorical_features(df_train, path)

@@ -8,7 +8,7 @@ from house_prices.preprocess import combine_features
 
 
 def make_predictions(input_data) -> np.ndarray:
-    path = 'models/'
+    path = '../models/'
     model_saved = joblib.load(path + 'model.joblib')
     y_test = pd.Series(np.zeros(len(input_data)), name='SalePrice')
     df_test, y_test = select_features(input_data, y_test)
